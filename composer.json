@@ -1,0 +1,22 @@
+{
+  "name": "almazovelnar/voices-api",
+  "description": "API library for Voices.az",
+  "minimum-stability": "stable",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "laravel",
+    "voices",
+    "api"
+  ],
+  "authors": [
+    {
+      "name": "Elnar Almazov",
+      "email": "almazovelnar96@gmail.com",
+      "role": "Maintainer"
+    }
+  ],
+  "require": {
+    "php": ">=8.0"
+  }
+}
