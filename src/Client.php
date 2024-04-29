@@ -4,6 +4,7 @@ namespace Voices;
 
 use GuzzleHttp\ClientInterface;
 use \GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\GuzzleException;
 
 class Client
 {
@@ -18,29 +19,25 @@ class Client
         protected string $token
     )
     {
+        $this->httpClient = new GuzzleClient();
     }
 
-    /**
-     * @return GuzzleClient|ClientInterface
-     */
-    public function getHttpClient(): GuzzleClient|ClientInterface
+    public function getUri(string $endpoint): string
     {
-        if (null === $this->httpClient) {
-            $this->httpClient = $this->createDefaultHttpClient();
-        }
-
-        return $this->httpClient;
-    }
-
-    public function createDefaultHttpClient(): GuzzleClient
-    {
-        return new GuzzleClient([
-            'base_url' => $this->baseUrl,
-        ]);
+        return $this->baseUrl . ltrim($endpoint, '/');
     }
 
     public function get(string $endpoint)
     {
-        return $this->getHttpClient()->get($endpoint);
+        return json_decode($this->httpClient->get($this->getUri($endpoint), [
+            'Authorization' => "{$this->token}"
+        ])->getBody(), true);
+    }
+
+    public function post(string $endpoint)
+    {
+        return json_decode($this->httpClient->post($this->getUri($endpoint), [
+            'Authorization' => "{$this->token}"
+        ])->getBody(), true);
     }
 }
