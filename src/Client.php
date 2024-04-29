@@ -1,6 +1,6 @@
 <?php
 
-namespace GM\Voices;
+namespace Voices;
 
 use GuzzleHttp\ClientInterface;
 use \GuzzleHttp\Client as GuzzleClient;
@@ -39,8 +39,8 @@ class Client
         ]);
     }
 
-    public function get()
+    public function get(string $endpoint)
     {
-
+        return $this->getHttpClient()->get($endpoint);
     }
 }
