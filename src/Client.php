@@ -2,11 +2,15 @@
 
 namespace GM\Voices;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
+use \GuzzleHttp\Client as GuzzleClient;
 
-class Api
+class Client
 {
-    protected Client $client;
+    /**
+     * @var ClientInterface
+     */
+    protected $httpClient;
 
     protected string $baseUrl = 'https://voices.az/api/';
 
@@ -14,11 +18,24 @@ class Api
         protected string $token
     )
     {
-        $this->client = new Client([
-            'base_uri' => $this->baseUrl,
-            'headers'  => [
-                'Authorization' => "{$this->token}",
-            ]
+    }
+
+    /**
+     * @return GuzzleClient|ClientInterface
+     */
+    public function getHttpClient(): GuzzleClient|ClientInterface
+    {
+        if (null === $this->httpClient) {
+            $this->httpClient = $this->createDefaultHttpClient();
+        }
+
+        return $this->httpClient;
+    }
+
+    public function createDefaultHttpClient(): GuzzleClient
+    {
+        return new GuzzleClient([
+            'base_url' => $this->baseUrl,
         ]);
     }
 
