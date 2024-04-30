@@ -4,6 +4,6 @@ namespace Voices\Exceptions;
 
 use Exception;
 
-class VoicesAIException extends Exception
+class VoicesAiException extends Exception
 {
 }

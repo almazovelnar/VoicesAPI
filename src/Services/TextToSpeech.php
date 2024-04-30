@@ -2,18 +2,28 @@
 
 namespace Voices\Services;
 
-use Voices\Client;
 use Voices\Exceptions\TokenException;
-use Voices\Exceptions\VoicesAIException;
+use Voices\Exceptions\VoicesAiException;
 
 class TextToSpeech extends AbstractService
 {
     /**
-     * @throws VoicesAIException
+     * @return mixed
      * @throws TokenException
+     * @throws VoicesAiException
      */
-    public function getVoices()
+    public function getVoices(): mixed
     {
         return $this->client->get('get-voices');
+    }
+
+    /**
+     * @return mixed
+     * @throws TokenException
+     * @throws VoicesAiException
+     */
+    public function getProjects(): mixed
+    {
+        return $this->client->get('services/text-to-speech/get-projects');
     }
 }

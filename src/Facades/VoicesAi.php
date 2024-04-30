@@ -1,22 +1,23 @@
 <?php
 
-namespace Voices;
+namespace Voices\Facades;
 
+use Voices\DTO\VoicesAiDTO;
 use Voices\Services\SpeechToText;
 use Voices\Services\TextToSpeech;
 
-class VoicesAI
+class VoicesAi
 {
-    private static $apiToken;
+    public static $apiToken;
 
     public static function textToSpeech(): TextToSpeech
     {
-        return TextToSpeech::instance(self::$apiToken);
+        return TextToSpeech::instance(new VoicesAiDTO(token: self::$apiToken));
     }
 
     public static function speechToText(): SpeechToText
     {
-        return SpeechToText::instance(self::$apiToken);
+        return SpeechToText::instance(new VoicesAiDTO(token: self::$apiToken));
     }
 
     public static function initialize(string $token): void

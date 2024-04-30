@@ -5,8 +5,8 @@ namespace Voices;
 use Throwable;
 use GuzzleHttp\ClientInterface;
 use Voices\Exceptions\TokenException;
-use \GuzzleHttp\Client as GuzzleClient;
-use Voices\Exceptions\VoicesAIException;
+use GuzzleHttp\Client as GuzzleClient;
+use Voices\Exceptions\VoicesAiException;
 use GuzzleHttp\Exception\GuzzleException;
 
 class Client
@@ -38,21 +38,25 @@ class Client
     }
 
     /**
-     * @throws VoicesAIException
+     * @param string $endpoint
+     * @return mixed
      * @throws TokenException
+     * @throws VoicesAiException
      */
-    public function get(string $endpoint)
+    public function get(string $endpoint): mixed
     {
         try {
             return json_decode($this->httpClient->get($this->getUri($endpoint), [
                 'headers' => $this->getHeaders()
             ])->getBody(), true);
+        } catch (TokenException $e) {
+            throw $e;
         } catch (Throwable $e) {
             if (in_array($e->getCode(), [401, 405])) {
                 throw new TokenException('Unauthorized or token is not valid');
             }
 
-            throw new VoicesAIException('Something went wrong');
+            throw new VoicesAiException('Something went wrong');
         }
     }
 
@@ -73,7 +77,7 @@ class Client
     public function getHeaders(): array
     {
         if (empty($this->token)) {
-            throw new TokenException('Token is not find');
+            throw new TokenException('Token is not find', 403);
         }
 
         return [
