@@ -22,8 +22,30 @@ class TextToSpeech extends AbstractService
      * @throws TokenException
      * @throws VoicesAiException
      */
-    public function getProjects(): mixed
+    public function getList(): mixed
     {
         return $this->client->get('services/text-to-speech/get-projects');
+    }
+
+    /**
+     * @param int $projectId
+     * @return mixed
+     * @throws TokenException
+     * @throws VoicesAiException
+     */
+    public function getById(int $projectId): mixed
+    {
+        return $this->client->get("services/text-to-speech/{$projectId}");
+    }
+
+    /**
+     * @param string $requestId
+     * @return mixed
+     * @throws TokenException
+     * @throws VoicesAiException
+     */
+    public function getResponse(string $requestId): mixed
+    {
+        return $this->client->get("services/text-to-speech/get-response/{$requestId}");
     }
 }

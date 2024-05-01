@@ -3,17 +3,12 @@
 namespace Voices;
 
 use Throwable;
-use GuzzleHttp\ClientInterface;
 use Voices\Exceptions\TokenException;
 use GuzzleHttp\Client as GuzzleClient;
 use Voices\Exceptions\VoicesAiException;
-use GuzzleHttp\Exception\GuzzleException;
 
 class Client
 {
-    /**
-     * @var ClientInterface
-     */
     protected $httpClient;
 
     protected $token;
@@ -25,13 +20,20 @@ class Client
         $this->httpClient = new GuzzleClient();
     }
 
+    /**
+     * @param string $token
+     * @return $this
+     */
     public function auth(string $token): static
     {
         $this->token = $token;
         return $this;
     }
 
-
+    /**
+     * @param string $endpoint
+     * @return string
+     */
     public function getUri(string $endpoint): string
     {
         return $this->baseUrl . ltrim($endpoint, '/');
@@ -39,15 +41,42 @@ class Client
 
     /**
      * @param string $endpoint
+     * @param array|null $params
      * @return mixed
      * @throws TokenException
      * @throws VoicesAiException
      */
-    public function get(string $endpoint): mixed
+    public function get(string $endpoint, ?array $params = []): mixed
+    {
+        return $this->request('GET', $endpoint, $params);
+    }
+
+    /**
+     * @param string $endpoint
+     * @param array|null $params
+     * @return mixed
+     * @throws TokenException
+     * @throws VoicesAiException
+     */
+    public function post(string $endpoint, ?array $params = []): mixed
+    {
+        return $this->request('POST', $endpoint, $params);
+    }
+
+    /**
+     * @param string $method
+     * @param string $endpoint
+     * @param array $params
+     * @return mixed
+     * @throws TokenException
+     * @throws VoicesAiException
+     */
+    public function request(string $method, string $endpoint, array $params): mixed
     {
         try {
-            return json_decode($this->httpClient->get($this->getUri($endpoint), [
-                'headers' => $this->getHeaders()
+            return json_decode($this->httpClient->request($method, $this->getUri($endpoint), [
+                'headers'     => $this->getHeaders(),
+                'form_params' => $params
             ])->getBody(), true);
         } catch (TokenException $e) {
             throw $e;
@@ -61,17 +90,7 @@ class Client
     }
 
     /**
-     * @throws GuzzleException
-     * @throws TokenException
-     */
-    public function post(string $endpoint)
-    {
-        return json_decode($this->httpClient->post($this->getUri($endpoint), [
-            'headers' => $this->getHeaders()
-        ])->getBody(), true);
-    }
-
-    /**
+     * @return string[]
      * @throws TokenException
      */
     public function getHeaders(): array
