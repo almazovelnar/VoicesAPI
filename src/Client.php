@@ -46,9 +46,9 @@ class Client
      * @throws TokenException
      * @throws VoicesAiException
      */
-    public function get(string $endpoint, ?array $params = []): mixed
+    public function get(string $endpoint, ?array $params = [], ?array $query = []): mixed
     {
-        return $this->request('GET', $endpoint, $params);
+        return $this->request('GET', $endpoint, $params, $query);
     }
 
     /**
@@ -58,9 +58,9 @@ class Client
      * @throws TokenException
      * @throws VoicesAiException
      */
-    public function post(string $endpoint, ?array $params = []): mixed
+    public function post(string $endpoint, ?array $params = [], ?array $query = []): mixed
     {
-        return $this->request('POST', $endpoint, $params);
+        return $this->request('POST', $endpoint, $params, $query);
     }
 
     /**
@@ -71,11 +71,12 @@ class Client
      * @throws TokenException
      * @throws VoicesAiException
      */
-    public function request(string $method, string $endpoint, array $params): mixed
+    public function request(string $method, string $endpoint, array $params, array $query): mixed
     {
         try {
             return json_decode($this->httpClient->request($method, $this->getUri($endpoint), [
                 'headers'     => $this->getHeaders(),
+                'query'       => $query,
                 'form_params' => $params
             ])->getBody(), true);
         } catch (TokenException $e) {

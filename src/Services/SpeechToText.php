@@ -8,13 +8,14 @@ use Voices\Exceptions\VoicesAiException;
 class SpeechToText extends AbstractService
 {
     /**
+     * @param array|null $filter
      * @return mixed
      * @throws TokenException
      * @throws VoicesAiException
      */
-    public function getList(): mixed
+    public function getList(?array $filter = []): mixed
     {
-        return $this->client->get('services/speech-to-text/get-projects');
+        return $this->client->get('services/speech-to-text/get-projects', query: $filter);
     }
 
     /**
