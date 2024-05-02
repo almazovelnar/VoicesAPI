@@ -4,17 +4,21 @@ namespace Voices\DTO;
 
 class VoicesAiDTO
 {
-    protected ?string $token;
 
     public function __construct(
-        ?string $token = null
+        protected ?string $token,
+        protected ?string $language,
     )
     {
-        $this->token = $token;
     }
 
-    public function getToken()
+    public function getToken(): ?string
     {
         return $this->token;
+    }
+
+    public function getLanguage(): ?string
+    {
+        return $this->language;
     }
 }

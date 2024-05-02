@@ -65,7 +65,7 @@ class TextToSpeech extends AbstractService
      * @throws TokenException
      * @throws VoicesAiException
      */
-    public function export(int $projectId, ?string $format = 'wav'): mixed
+    public function export(int $projectId, ?string $format = 'mp3'): mixed
     {
         return $this->client->post("services/text-to-speech/export/{$projectId}", [
             'format' => $format,

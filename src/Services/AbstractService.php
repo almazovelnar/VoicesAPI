@@ -31,6 +31,10 @@ abstract class AbstractService
             if ($voicesAi->getToken()) {
                 static::$instance->setToken($voicesAi->getToken());
             }
+
+            if ($voicesAi->getLanguage()) {
+                static::$instance->setLanguage($voicesAi->getLanguage());
+            }
         }
 
         return static::$instance;
@@ -43,5 +47,14 @@ abstract class AbstractService
     public function setToken($token): Client
     {
         return $this->client->auth($token);
+    }
+
+    /**
+     * @param $language
+     * @return Client
+     */
+    public function setLanguage($language): Client
+    {
+        return $this->client->language($language);
     }
 }

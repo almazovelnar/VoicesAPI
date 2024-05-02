@@ -10,8 +10,8 @@ use Voices\Exceptions\VoicesAiException;
 class Client
 {
     protected $httpClient;
-
     protected $token;
+    protected $language = 'en';
 
     protected string $baseUrl = 'https://voices.az/api/';
 
@@ -27,6 +27,16 @@ class Client
     public function auth(string $token): static
     {
         $this->token = $token;
+        return $this;
+    }
+
+    /**
+     * @param string $language
+     * @return $this
+     */
+    public function language(string $language): static
+    {
+        $this->language = $language;
         return $this;
     }
 
@@ -54,6 +64,7 @@ class Client
     /**
      * @param string $endpoint
      * @param array|null $params
+     * @param array|null $query
      * @return mixed
      * @throws TokenException
      * @throws VoicesAiException
@@ -67,6 +78,7 @@ class Client
      * @param string $method
      * @param string $endpoint
      * @param array $params
+     * @param array $query
      * @return mixed
      * @throws TokenException
      * @throws VoicesAiException
@@ -101,9 +113,10 @@ class Client
         }
 
         return [
-            'Authorization' => "{$this->token}",
-            'Content-Type: application/json',
-            'Accept: application/json',
+            "Authorization"   => "{$this->token}",
+            "Content-Type"    => "application/json",
+            "Accept"          => "application/json",
+            "Accept-Language" => "{$this->language}",
         ];
     }
 }
