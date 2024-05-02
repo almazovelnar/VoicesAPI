@@ -29,14 +29,14 @@ class VoicesAi
         );
     }
 
-    public static function initialize(string $token): void
+    public static function initialize(string $token, ?string $language = 'en')
     {
         self::$apiToken = $token;
+        self::$language = $language;
     }
 
-    public static function locale(string $language)
+    public static function setLocale(string $language)
     {
         self::$language = $language;
-        return static();
     }
 }
